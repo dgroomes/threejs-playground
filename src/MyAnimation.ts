@@ -1,4 +1,7 @@
-import {BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {Fog, Group, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {addShape, newCamera, newLight, newRenderer, newRoundedRectangle, newScene} from "./animation-util";
+
+const HEX_GRAY = 0x808080;
 
 /**
  * This class encapsulates the core animation code in this project.
@@ -7,29 +10,43 @@ export class MyAnimation {
 
     private readonly scene: Scene;
     private readonly camera: PerspectiveCamera;
-    private readonly cube: Mesh<BoxGeometry, MeshBasicMaterial>;
     private animate: () => void;
     private renderer: WebGLRenderer;
+    private group: Group;
 
     constructor() {
-        this.scene = new Scene();
-        this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.camera.position.z = 5;
-        this.renderer = new WebGLRenderer();
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        const geometry = new BoxGeometry();
-        const material = new MeshBasicMaterial({color: 0x00ff00});
-        this.cube = new Mesh(geometry, material);
-        this.scene.add(this.cube);
+        this.scene = newScene();
+        this.scene.fog = new Fog(HEX_GRAY)
+
+        this.camera = newCamera();
+        this.scene.add(this.camera);
+        const light = newLight();
+        this.camera.add(light);
+
+        this.renderer = newRenderer();
+
+        {
+            this.group = new Group();
+            this.group.position.y = 50;
+            this.scene.add(this.group);
+            const roundedRectShape = newRoundedRectangle();
+            const extrudeSettings = {
+                depth: 8,
+                bevelEnabled: true,
+                bevelSegments: 2,
+                steps: 2,
+                bevelSize: 1,
+                bevelThickness: 1
+            };
+            addShape(this.group, roundedRectShape, extrudeSettings, 0x008000, -150, 150, 0, 0, 0, 0, 1);
+        }
 
         // This code is written in a wacky way.
-        // Rotate the cube continuously!
+        // Rotate the group continuously!
         const that = this;
         this.animate = function animate() {
             requestAnimationFrame(animate);
-
-            that.cube.rotation.x += 0.01;
-            that.cube.rotation.y += 0.01;
+            that.group.rotation.y += 0.01;
             that.renderer.render(that.scene, that.camera);
         }
     }
