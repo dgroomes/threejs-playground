@@ -6,8 +6,10 @@ import {BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRen
 export class MyAnimation {
 
     private readonly scene: Scene;
-    private renderer: WebGLRenderer;
     private readonly camera: PerspectiveCamera;
+    private readonly cube: Mesh<BoxGeometry, MeshBasicMaterial>;
+    private animate: () => void;
+    private renderer: WebGLRenderer;
 
     constructor() {
         this.scene = new Scene();
@@ -17,8 +19,19 @@ export class MyAnimation {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         const geometry = new BoxGeometry();
         const material = new MeshBasicMaterial({color: 0x00ff00});
-        const cube = new Mesh(geometry, material);
-        this.scene.add(cube);
+        this.cube = new Mesh(geometry, material);
+        this.scene.add(this.cube);
+
+        // This code is written in a wacky way.
+        // Rotate the cube continuously!
+        const that = this;
+        this.animate = function animate() {
+            requestAnimationFrame(animate);
+
+            that.cube.rotation.x += 0.01;
+            that.cube.rotation.y += 0.01;
+            that.renderer.render(that.scene, that.camera);
+        }
     }
 
     /**
@@ -26,7 +39,6 @@ export class MyAnimation {
      */
     activate(): void {
         document.body.appendChild(this.renderer.domElement);
-        requestAnimationFrame(this.activate);
-        this.renderer.render(this.scene, this.camera);
+        this.animate();
     }
 }
