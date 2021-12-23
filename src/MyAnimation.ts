@@ -1,4 +1,4 @@
-import {Fog, Group, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {ColorRepresentation, Fog, Group, PerspectiveCamera, Scene, WebGLRenderer} from "three";
 import {addShape, newCamera, newLight, newRenderer, newSquircle, newScene} from "./animation-util";
 
 const HEX_GRAY = 0x808080;
@@ -42,29 +42,39 @@ export class MyAnimation {
                 bevelThickness: 1
             };
 
+            // I don't have time to figure out what is idiomatic, but I'm creating a coordinate system defined as
+            // 0-indexed where the origin is the top left of the viewport.
+            let column = 0;
+
+            // The amount to offset the "row" and "column" logical representations when rendering to the viewport
+            const X_OFFSET = -150;
+            const Y_OFFSET = 200;
+            const X_SIZE = 50; // The 'x size' is the width of each squircle-pixel (SP)
+            const Y_SIZE = 50; // The 'y size' is the height of each SP
+
+            /** Add a squircle-pixel */
+            const addSp = (row: number, column: number, color: ColorRepresentation): void => {
+                addShape(this.group, squircle, extrudeSettings, color, column * X_SIZE + X_OFFSET, Y_OFFSET - row * Y_SIZE, 0, 0, 0, 0, 1);
+            }
+
             // 1 - first row  (top)
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -150, 200, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -100, 200, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -50, 200, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, 0, 200, 0, 0, 0, 0, 1);
+            addSp(0, 0, HEX_GREEN_FOREST);
+            addSp(0, 1, HEX_GREEN_FOREST);
+            addSp(0, 2, HEX_GREEN_FOREST);
+            addSp(0, 3, HEX_GREEN);
 
             // 2 - second row (second from top)
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN_FOREST, -150, 150, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN_FOREST, -100, 150, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -50, 150, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, 0, 150, 0, 0, 0, 0, 1);
+            // addShape(this.group, squircle, extrudeSettings, HEX_GREEN_FOREST, -150, 150, 0, 0, 0, 0, 1);
+            addSp(1, 0, HEX_GREEN_FOREST);
+            addSp(1, 1, HEX_GREEN_FOREST);
+            addSp(1, 2, HEX_GREEN);
 
             // 3
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN_FOREST, -150, 100, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN_FOREST, -100, 100, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_WHITE, -50, 100, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_WHITE, 0, 100, 0, 0, 0, 0, 1);
+            addSp(2, 0, HEX_GREEN_FOREST);
+            addSp(2, 1, HEX_GREEN);
 
             // 4
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -150, 50, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -100, 50, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -50, 50, 0, 0, 0, 0, 1);
-            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, 0, 50, 0, 0, 0, 0, 1);
+            addSp(3, 0, HEX_WHITE);
         }
 
         // This code is written in a wacky way.
