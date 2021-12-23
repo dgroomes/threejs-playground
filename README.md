@@ -28,14 +28,14 @@ This project uses three.js to make an animation inspired by pixel art.
 
 The animation can be hosted in GitHub Pages. The process is not automated. Build the project, then copy the contents of
 `dist/` into `docs/` and then commit and push the changes. The final result should be published by GitHub to the
-repository's GitHub Pages page at <https://pages.github.com/dgroomes/threejs-playground>.
+repository's GitHub Pages page at <https://dgroomes.github.io/threejs-playground>.
 
 ## TODO
 
 * DONE Bundle the JavaScript/TypeScript and serve the files with Webpack
 * DONE Hello world three.js
 * DONE Make a grid of squares/blocks in three.js
-* IN PROGRESS Publish to GitHub Pages
+* DONE Publish to GitHub Pages
 * Add a pre-defined shader
 
 ## Reference
