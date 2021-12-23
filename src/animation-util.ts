@@ -33,10 +33,10 @@ export function newLight(): PointLight {
  *
  * This shape code was taken from the three.js example: https://github.com/mrdoob/three.js/blob/master/examples/webgl_geometry_shapes.html
  */
-export function newSquircle(): Shape {
+export function newSquircle(width: number, height: number, radius: number): Shape {
     const shape = new THREE.Shape();
 
-    const x = 0, y = 0, width = 50, height = 50, radius = 20;
+    const x = 0, y = 0;
 
     shape.moveTo(x, y + radius);
     shape.lineTo(x, y + height - radius);
