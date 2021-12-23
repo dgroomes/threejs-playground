@@ -1,9 +1,5 @@
-import * as _ from 'lodash';
+import {MyAnimation} from "./MyAnimation";
+import './style.css'
 
-function greetingElement(): Element {
-    const element = document.createElement('div');
-    element.innerHTML = _.join(['Hello', 'from', "'threejs-playground'", '!'], ' ');
-    return element;
-}
-
-document.body.appendChild(greetingElement());
+const myAnimation = new MyAnimation();
+myAnimation.activate();

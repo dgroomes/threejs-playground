@@ -29,7 +29,7 @@ This project uses three.js to make an animation.
 ## TODO
 
 * DONE Bundle the JavaScript/TypeScript and serve the files with Webpack
-* Hello world three.js
+* DONE Hello world three.js
 * Make a grid of squares/blocks in three.js
 * Replace the grid with a circle
 * Simple shader?
