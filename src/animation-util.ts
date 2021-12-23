@@ -9,42 +9,49 @@ import {
 } from "three";
 
 // Functions extracted from the three.js example: https://github.com/mrdoob/three.js/blob/master/examples/webgl_geometry_shapes.html
-export function newScene() :Scene {
+export function newScene(): Scene {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
     return scene;
 }
 
-export function newCamera() : PerspectiveCamera {
+export function newCamera(): PerspectiveCamera {
     const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.set(0, 150, 500);
     return camera;
 }
 
-export function newLight() : PointLight {
+export function newLight(): PointLight {
     return new THREE.PointLight(0xffffff, 0.8);
 }
 
-export function newRoundedRectangle() : Shape {
-    const roundedRectShape = new THREE.Shape();
 
-    (function roundedRect(ctx, x, y, width, height, radius) {
-        ctx.moveTo(x, y + radius);
-        ctx.lineTo(x, y + height - radius);
-        ctx.quadraticCurveTo(x, y + height, x + radius, y + height);
-        ctx.lineTo(x + width - radius, y + height);
-        ctx.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
-        ctx.lineTo(x + width, y + radius);
-        ctx.quadraticCurveTo(x + width, y, x + width - radius, y);
-        ctx.lineTo(x + radius, y);
-        ctx.quadraticCurveTo(x, y, x, y + radius);
+/**
+ * Create a squircle. It's like rounded square.
+ *
+ * Definition of squircle: https://en.wikipedia.org/wiki/Squircle
+ *
+ * This shape code was taken from the three.js example: https://github.com/mrdoob/three.js/blob/master/examples/webgl_geometry_shapes.html
+ */
+export function newSquircle(): Shape {
+    const shape = new THREE.Shape();
 
-    })(roundedRectShape, 0, 0, 50, 50, 20);
+    const x = 0, y = 0, width = 50, height = 50, radius = 20;
 
-    return roundedRectShape;
+    shape.moveTo(x, y + radius);
+    shape.lineTo(x, y + height - radius);
+    shape.quadraticCurveTo(x, y + height, x + radius, y + height);
+    shape.lineTo(x + width - radius, y + height);
+    shape.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
+    shape.lineTo(x + width, y + radius);
+    shape.quadraticCurveTo(x + width, y, x + width - radius, y);
+    shape.lineTo(x + radius, y);
+    shape.quadraticCurveTo(x, y, x, y + radius);
+
+    return shape;
 }
 
-export function newRenderer() : WebGLRenderer {
+export function newRenderer(): WebGLRenderer {
     const renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -54,7 +61,7 @@ export function newRenderer() : WebGLRenderer {
 /**
  * Add a shape a group. Extrude the shape into a 3D object (I think?)
  */
-export function addShape(group: Group, shape : Shape, extrudeSettings : ExtrudeGeometryOptions, color : ColorRepresentation, x : number, y : number, z : number, rx : number, ry : number, rz : number, s : number) {
+export function addShape(group: Group, shape: Shape, extrudeSettings: ExtrudeGeometryOptions, color: ColorRepresentation, x: number, y: number, z: number, rx: number, ry: number, rz: number, s: number) {
 
     // Extrude the shape
     const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);

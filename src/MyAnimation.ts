@@ -1,7 +1,10 @@
 import {Fog, Group, PerspectiveCamera, Scene, WebGLRenderer} from "three";
-import {addShape, newCamera, newLight, newRenderer, newRoundedRectangle, newScene} from "./animation-util";
+import {addShape, newCamera, newLight, newRenderer, newSquircle, newScene} from "./animation-util";
 
 const HEX_GRAY = 0x808080;
+const HEX_GREEN_FOREST = 0x008000;
+const HEX_GREEN = 0x6fd251;
+const HEX_WHITE = 0xfcfcfc;
 
 /**
  * This class encapsulates the core animation code in this project.
@@ -16,7 +19,7 @@ export class MyAnimation {
 
     constructor() {
         this.scene = newScene();
-        this.scene.fog = new Fog(HEX_GRAY)
+        // this.scene.fog = new Fog(HEX_GRAY)
 
         this.camera = newCamera();
         this.scene.add(this.camera);
@@ -29,7 +32,7 @@ export class MyAnimation {
             this.group = new Group();
             this.group.position.y = 50;
             this.scene.add(this.group);
-            const roundedRectShape = newRoundedRectangle();
+            const squircle = newSquircle();
             const extrudeSettings = {
                 depth: 8,
                 bevelEnabled: true,
@@ -38,7 +41,30 @@ export class MyAnimation {
                 bevelSize: 1,
                 bevelThickness: 1
             };
-            addShape(this.group, roundedRectShape, extrudeSettings, 0x008000, -150, 150, 0, 0, 0, 0, 1);
+
+            // 1 - first row  (top)
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -150, 200, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -100, 200, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -50, 200, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, 0, 200, 0, 0, 0, 0, 1);
+
+            // 2 - second row (second from top)
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN_FOREST, -150, 150, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN_FOREST, -100, 150, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -50, 150, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, 0, 150, 0, 0, 0, 0, 1);
+
+            // 3
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN_FOREST, -150, 100, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN_FOREST, -100, 100, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_WHITE, -50, 100, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_WHITE, 0, 100, 0, 0, 0, 0, 1);
+
+            // 4
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -150, 50, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -100, 50, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, -50, 50, 0, 0, 0, 0, 1);
+            addShape(this.group, squircle, extrudeSettings, HEX_GREEN, 0, 50, 0, 0, 0, 0, 1);
         }
 
         // This code is written in a wacky way.
