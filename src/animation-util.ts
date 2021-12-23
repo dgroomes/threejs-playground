@@ -53,7 +53,7 @@ export function newSquircle(width: number, height: number, radius: number): Shap
 
 export function newRenderer(): WebGLRenderer {
     const renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setPixelRatio(window.devicePixelRatio);
+    // renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     return renderer;
 }
