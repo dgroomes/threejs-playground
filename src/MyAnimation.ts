@@ -49,9 +49,9 @@ export class MyAnimation {
             // The amount to offset the "row" and "column" logical representations when rendering to the viewport
             const X_SIZE = 25; // The 'x size' is the width of each squircle-pixel (SP)
             const Y_SIZE = 25; // The 'y size' is the height of each SP
-            const X_OFFSET = - 4 * X_SIZE;
+            const X_OFFSET = -4 * X_SIZE;
             const Y_OFFSET = 10 * Y_SIZE;
-            const squircle = newSquircle(X_SIZE, Y_SIZE,10);
+            const squircle = newSquircle(X_SIZE, Y_SIZE, 10);
 
             /** Add a squircle-pixel */
             const addSp = (row: number, column: number, color: ColorRepresentation): void => {
@@ -69,46 +69,232 @@ export class MyAnimation {
 
             // Second row (one below the top row)
             addSp(1, 4, HEX_BLACK);
+            addSp(1, 5, HEX_WHITE);
+            addSp(1, 6, HEX_WHITE);
+            addSp(1, 7, HEX_WHITE);
+            addSp(1, 8, HEX_WHITE);
             addSp(1, 9, HEX_BLACK);
 
             addSp(2, 3, HEX_BLACK);
+            addSp(2, 4, HEX_GREEN);
+            addSp(2, 5, HEX_GREEN);
+            addSp(2, 6, HEX_WHITE);
+            addSp(2, 7, HEX_WHITE);
+            addSp(2, 8, HEX_WHITE);
+            addSp(2, 9, HEX_WHITE);
             addSp(2, 10, HEX_BLACK);
 
             addSp(3, 2, HEX_BLACK);
+            addSp(3, 3, HEX_GREEN);
+            addSp(3, 4, HEX_GREEN);
+            addSp(3, 5, HEX_GREEN);
+            addSp(3, 6, HEX_WHITE);
+            addSp(3, 7, HEX_WHITE);
+            addSp(3, 8, HEX_WHITE);
+            addSp(3, 9, HEX_GREEN);
+            addSp(3, 10, HEX_GREEN);
             addSp(3, 11, HEX_BLACK);
 
-            addSp(4, 2, HEX_BLACK);
-            addSp(4, 11, HEX_BLACK);
+            {
+                let row4Column = 2;
+                const row4 = (color: ColorRepresentation): void => {
+                    addSp(4, row4Column, color);
+                    row4Column++;
+                }
+                row4(HEX_BLACK);
+                row4(HEX_GREEN);
+                row4(HEX_GREEN);
+                row4(HEX_GREEN);
+                row4(HEX_WHITE);
+                row4(HEX_WHITE);
+                row4(HEX_WHITE);
+                row4(HEX_GREEN);
+                row4(HEX_GREEN);
+                row4(HEX_GREEN);
+                addSp(4, 11, HEX_BLACK);
+            }
 
-            addSp(5, 1, HEX_BLACK);
-            addSp(5, 12, HEX_BLACK);
+            {
+                addSp(5, 1, HEX_BLACK);
+                const row5 = (colors: ColorRepresentation[]): void => {
+                    let column = 2;
+                    for (let color of colors) {
+                        addSp(5, column++, color);
+                    }
+                }
+                row5([
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN
+                ]);
+                addSp(5, 12, HEX_BLACK);
+            }
+
+            const rowOf = (row: number, startingColumn: number, colors: ColorRepresentation[]): void => {
+                for (let color of colors) {
+                    addSp(row, startingColumn++, color);
+                }
+            }
 
             addSp(6, 1, HEX_BLACK);
+            {
+                rowOf(6, 2, [
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                ]);
+            }
             addSp(6, 12, HEX_BLACK);
 
             addSp(7, 0, HEX_BLACK);
+            {
+                rowOf(7, 1, [
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                ]);
+            }
             addSp(7, 13, HEX_BLACK);
 
             addSp(8, 0, HEX_BLACK);
+            {
+                rowOf(8, 1, [
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                ])
+            }
             addSp(8, 13, HEX_BLACK);
 
             addSp(9, 0, HEX_BLACK);
+            {
+                rowOf(9, 1, [
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                ])
+            }
             addSp(9, 13, HEX_BLACK);
 
             addSp(10, 0, HEX_BLACK);
+            {
+                rowOf(10, 1, [
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                ])
+            }
             addSp(10, 13, HEX_BLACK);
 
             addSp(11, 1, HEX_BLACK);
+            {
+                rowOf(11, 2, [
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN,
+                ])
+            }
             addSp(11, 12, HEX_BLACK);
 
             addSp(12, 1, HEX_BLACK);
+            {
+                rowOf(12, 2, [
+                    HEX_GREEN,
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_GREEN,
+                    HEX_GREEN
+                ])
+            }
             addSp(12, 12, HEX_BLACK);
 
             addSp(13, 2, HEX_BLACK);
+            {
+                rowOf(13, 3, [
+                    HEX_GREEN,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                ])
+            }
             addSp(13, 11, HEX_BLACK);
 
             addSp(14, 3, HEX_BLACK);
             addSp(14, 4, HEX_BLACK);
+            {
+                rowOf(14, 5, [
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                    HEX_WHITE,
+                ])
+            }
             addSp(14, 9, HEX_BLACK);
             addSp(14, 10, HEX_BLACK);
 
