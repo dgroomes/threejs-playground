@@ -70,11 +70,11 @@ export class MyAnimation {
              * `maybeConvertEmojiColorAlias(0x6fd251)` will just return the given value: `0x6fd251`.
              */
             const maybeConvertEmojiColorAlias = (color: ColorRepresentation): ColorRepresentation => {
-                if (color == HEX_GREEN_EMOJI_ALIAS) {
+                if (color === HEX_GREEN_EMOJI_ALIAS) {
                     return HEX_GREEN;
-                } else if (color == HEX_WHITE_EMOJI_ALIAS) {
+                } else if (color === HEX_WHITE_EMOJI_ALIAS) {
                     return HEX_WHITE;
-                } else if (color == HEX_BLACK_EMOJI_ALIAS) {
+                } else if (color === HEX_BLACK_EMOJI_ALIAS) {
                     return HEX_BLACK;
                 } else {
                     return color;
@@ -84,12 +84,27 @@ export class MyAnimation {
             let rowIdx = 0;
 
             /**
-             * Add a row of squircle-pixel.
+             * Add a row of squircle-pixels.
              *
              * This is NOT a pure function. It has a closure over a row index variable.
              */
             const rowOf = (startingColumn: number, colors: ColorRepresentation[]): void => {
                 for (let color of colors) {
+                    let color1: ColorRepresentation = color;
+                    color1 = maybeConvertEmojiColorAlias(color1);
+                    addShape(this.group, squircle, extrudeSettings, color1, startingColumn++ * X_SIZE + X_OFFSET, Y_OFFSET - rowIdx * Y_SIZE, 0, 0, 0, 0, 1);
+                }
+
+                rowIdx++;
+            }
+
+            /**
+             * THIS DOES NOT WORK
+             * Like "rowOf()" but it takes a string of emoji color aliases, like ""⬛️🟩🟩▢▢▢▢⬛️".
+             */
+            const rowFromEmojiAliasString = (startingColumn: number, colorsString: string): void => {
+                for (let color of colorsString) {
+                    console.log(`Found color: ${color}`)
                     let color1: ColorRepresentation = color;
                     color1 = maybeConvertEmojiColorAlias(color1);
                     addShape(this.group, squircle, extrudeSettings, color1, startingColumn++ * X_SIZE + X_OFFSET, Y_OFFSET - rowIdx * Y_SIZE, 0, 0, 0, 0, 1);
