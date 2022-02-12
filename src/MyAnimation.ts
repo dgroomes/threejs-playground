@@ -2,10 +2,19 @@ import {ColorRepresentation, Fog, Group, PerspectiveCamera, Scene, WebGLRenderer
 import {addShape, newCamera, newLight, newRenderer, newSquircle, newScene} from "./animation-util";
 
 const HEX_GRAY = 0x808080;
+const HEX_GRAY_EMOJI_ALIAS = "⬜";
+
 const HEX_GREEN_FOREST = 0x008000;
+const HEX_GREEN_FOREST_EMOJI_ALIAS = "🦚";
+
 const HEX_GREEN = 0x6fd251;
+const HEX_GREEN_EMOJI_ALIAS = "🟩";
+
 const HEX_WHITE = 0xfcfcfc;
+const HEX_WHITE_EMOJI_ALIAS = "▢";
+
 const HEX_BLACK = 0x000000;
+const HEX_BLACK_EMOJI_ALIAS = "⬛️";
 
 /**
  * This class encapsulates the core animation code in this project.
@@ -53,8 +62,36 @@ export class MyAnimation {
             const Y_OFFSET = 10 * Y_SIZE;
             const squircle = newSquircle(X_SIZE, Y_SIZE, 10);
 
+            /**
+             * This auto-converts emoji color aliases to the right color code.
+             * @param color should be a proper ColorRepresentation or stringly-typed "emoji" alias
+             * @return a proper ColorRepresentation
+             *
+             * For example:
+             *
+             * `maybeConvertEmojiColorAlias("🟩")` will return the hex code for green: `0x6fd251`.
+             *
+             * `maybeConvertEmojiColorAlias(0x6fd251)` will just return the given value: `0x6fd251`.
+             */
+            const maybeConvertEmojiColorAlias = (color: ColorRepresentation): ColorRepresentation => {
+                if (color == HEX_GRAY_EMOJI_ALIAS) {
+                    return HEX_GRAY;
+                } else if (color == HEX_GREEN_FOREST_EMOJI_ALIAS) {
+                    return HEX_GREEN_FOREST;
+                } else if (color == HEX_GREEN_EMOJI_ALIAS) {
+                    return HEX_GREEN;
+                } else if (color == HEX_WHITE_EMOJI_ALIAS) {
+                    return HEX_WHITE;
+                } else if (color == HEX_BLACK_EMOJI_ALIAS) {
+                    return HEX_BLACK;
+                } else {
+                    return color;
+                }
+            }
+
             /** Add a squircle-pixel */
             const addSp = (row: number, column: number, color: ColorRepresentation): void => {
+                color = maybeConvertEmojiColorAlias(color);
                 addShape(this.group, squircle, extrudeSettings, color, column * X_SIZE + X_OFFSET, Y_OFFSET - row * Y_SIZE, 0, 0, 0, 0, 1);
             }
 
@@ -62,29 +99,29 @@ export class MyAnimation {
             // There will be 16 rows and 14 columns total. That means the origin is (0,0) and the opposite corner is (15, 13)
 
             // First row (top)
-            addSp(0, 5, HEX_BLACK);
-            addSp(0, 6, HEX_BLACK);
-            addSp(0, 7, HEX_BLACK);
-            addSp(0, 8, HEX_BLACK);
+            addSp(0, 5, "⬛️");
+            addSp(0, 6, "⬛️");
+            addSp(0, 7, "⬛️");
+            addSp(0, 8, "⬛️");
 
             // Second row (one below the top row)
-            addSp(1, 4, HEX_BLACK);
+            addSp(1, 4, "⬛️");
             addSp(1, 5, HEX_WHITE);
             addSp(1, 6, HEX_WHITE);
             addSp(1, 7, HEX_WHITE);
             addSp(1, 8, HEX_WHITE);
-            addSp(1, 9, HEX_BLACK);
+            addSp(1, 9, "⬛️");
 
-            addSp(2, 3, HEX_BLACK);
+            addSp(2, 3, "⬛️");
             addSp(2, 4, HEX_GREEN);
             addSp(2, 5, HEX_GREEN);
             addSp(2, 6, HEX_WHITE);
             addSp(2, 7, HEX_WHITE);
             addSp(2, 8, HEX_WHITE);
             addSp(2, 9, HEX_WHITE);
-            addSp(2, 10, HEX_BLACK);
+            addSp(2, 10, "⬛️");
 
-            addSp(3, 2, HEX_BLACK);
+            addSp(3, 2, "⬛️");
             addSp(3, 3, HEX_GREEN);
             addSp(3, 4, HEX_GREEN);
             addSp(3, 5, HEX_GREEN);
@@ -93,7 +130,7 @@ export class MyAnimation {
             addSp(3, 8, HEX_WHITE);
             addSp(3, 9, HEX_GREEN);
             addSp(3, 10, HEX_GREEN);
-            addSp(3, 11, HEX_BLACK);
+            addSp(3, 11, "⬛️");
 
             {
                 let row4Column = 2;
@@ -101,7 +138,7 @@ export class MyAnimation {
                     addSp(4, row4Column, color);
                     row4Column++;
                 }
-                row4(HEX_BLACK);
+                row4("⬛️");
                 row4(HEX_GREEN);
                 row4(HEX_GREEN);
                 row4(HEX_GREEN);
@@ -111,11 +148,11 @@ export class MyAnimation {
                 row4(HEX_GREEN);
                 row4(HEX_GREEN);
                 row4(HEX_GREEN);
-                addSp(4, 11, HEX_BLACK);
+                addSp(4, 11, "⬛️");
             }
 
             {
-                addSp(5, 1, HEX_BLACK);
+                addSp(5, 1, "⬛️");
                 const row5 = (colors: ColorRepresentation[]): void => {
                     let column = 2;
                     for (let color of colors) {
@@ -134,16 +171,18 @@ export class MyAnimation {
                     HEX_GREEN,
                     HEX_GREEN
                 ]);
-                addSp(5, 12, HEX_BLACK);
+                addSp(5, 12, "⬛️");
             }
 
+            // I got desperate and clever at this point and defined a helper function to build a row of squircles
+            // from an array of colors. This is more expressive.
             const rowOf = (row: number, startingColumn: number, colors: ColorRepresentation[]): void => {
                 for (let color of colors) {
                     addSp(row, startingColumn++, color);
                 }
             }
 
-            addSp(6, 1, HEX_BLACK);
+            addSp(6, 1, "⬛️");
             {
                 rowOf(6, 2, [
                     HEX_WHITE,
@@ -158,9 +197,9 @@ export class MyAnimation {
                     HEX_GREEN,
                 ]);
             }
-            addSp(6, 12, HEX_BLACK);
+            addSp(6, 12, "⬛️");
 
-            addSp(7, 0, HEX_BLACK);
+            addSp(7, 0, "⬛️");
             {
                 rowOf(7, 1, [
                     HEX_GREEN,
@@ -177,9 +216,9 @@ export class MyAnimation {
                     HEX_WHITE,
                 ]);
             }
-            addSp(7, 13, HEX_BLACK);
+            addSp(7, 13, "⬛️");
 
-            addSp(8, 0, HEX_BLACK);
+            addSp(8, 0, "⬛️");
             {
                 rowOf(8, 1, [
                     HEX_WHITE,
@@ -196,9 +235,9 @@ export class MyAnimation {
                     HEX_WHITE,
                 ])
             }
-            addSp(8, 13, HEX_BLACK);
+            addSp(8, 13, "⬛️");
 
-            addSp(9, 0, HEX_BLACK);
+            addSp(9, 0, "⬛️");
             {
                 rowOf(9, 1, [
                     HEX_WHITE,
@@ -215,9 +254,9 @@ export class MyAnimation {
                     HEX_GREEN,
                 ])
             }
-            addSp(9, 13, HEX_BLACK);
+            addSp(9, 13, "⬛️");
 
-            addSp(10, 0, HEX_BLACK);
+            addSp(10, 0, "⬛️");
             {
                 rowOf(10, 1, [
                     HEX_GREEN,
@@ -234,9 +273,9 @@ export class MyAnimation {
                     HEX_GREEN,
                 ])
             }
-            addSp(10, 13, HEX_BLACK);
+            addSp(10, 13, "⬛️");
 
-            addSp(11, 1, HEX_BLACK);
+            addSp(11, 1, "⬛️");
             {
                 rowOf(11, 2, [
                     HEX_GREEN,
@@ -251,9 +290,9 @@ export class MyAnimation {
                     HEX_GREEN,
                 ])
             }
-            addSp(11, 12, HEX_BLACK);
+            addSp(11, 12, "⬛️");
 
-            addSp(12, 1, HEX_BLACK);
+            addSp(12, 1, "⬛️");
             {
                 rowOf(12, 2, [
                     HEX_GREEN,
@@ -268,9 +307,9 @@ export class MyAnimation {
                     HEX_GREEN
                 ])
             }
-            addSp(12, 12, HEX_BLACK);
+            addSp(12, 12, "⬛️");
 
-            addSp(13, 2, HEX_BLACK);
+            addSp(13, 2, "⬛️");
             {
                 rowOf(13, 3, [
                     HEX_GREEN,
@@ -283,10 +322,10 @@ export class MyAnimation {
                     HEX_WHITE,
                 ])
             }
-            addSp(13, 11, HEX_BLACK);
+            addSp(13, 11, "⬛️");
 
-            addSp(14, 3, HEX_BLACK);
-            addSp(14, 4, HEX_BLACK);
+            addSp(14, 3, "⬛️");
+            addSp(14, 4, "⬛️");
             {
                 rowOf(14, 5, [
                     HEX_WHITE,
@@ -295,13 +334,13 @@ export class MyAnimation {
                     HEX_WHITE,
                 ])
             }
-            addSp(14, 9, HEX_BLACK);
-            addSp(14, 10, HEX_BLACK);
+            addSp(14, 9, "⬛️");
+            addSp(14, 10, "⬛️");
 
-            addSp(15, 5, HEX_BLACK);
-            addSp(15, 6, HEX_BLACK);
-            addSp(15, 7, HEX_BLACK);
-            addSp(15, 8, HEX_BLACK);
+            addSp(15, 5, "⬛️");
+            addSp(15, 6, "⬛️");
+            addSp(15, 7, "⬛️");
+            addSp(15, 8, "⬛️");
         }
 
         // This code is written in a wacky way.
