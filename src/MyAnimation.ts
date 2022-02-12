@@ -2,10 +2,6 @@ import {ColorRepresentation, Fog, Group, PerspectiveCamera, Scene, WebGLRenderer
 import {addShape, newCamera, newLight, newRenderer, newSquircle, newScene} from "./animation-util";
 
 const HEX_GRAY = 0x808080;
-const HEX_GRAY_EMOJI_ALIAS = "⬜";
-
-const HEX_GREEN_FOREST = 0x008000;
-const HEX_GREEN_FOREST_EMOJI_ALIAS = "🦚";
 
 const HEX_GREEN = 0x6fd251;
 const HEX_GREEN_EMOJI_ALIAS = "🟩";
@@ -74,11 +70,7 @@ export class MyAnimation {
              * `maybeConvertEmojiColorAlias(0x6fd251)` will just return the given value: `0x6fd251`.
              */
             const maybeConvertEmojiColorAlias = (color: ColorRepresentation): ColorRepresentation => {
-                if (color == HEX_GRAY_EMOJI_ALIAS) {
-                    return HEX_GRAY;
-                } else if (color == HEX_GREEN_FOREST_EMOJI_ALIAS) {
-                    return HEX_GREEN_FOREST;
-                } else if (color == HEX_GREEN_EMOJI_ALIAS) {
+                if (color == HEX_GREEN_EMOJI_ALIAS) {
                     return HEX_GREEN;
                 } else if (color == HEX_WHITE_EMOJI_ALIAS) {
                     return HEX_WHITE;
@@ -106,30 +98,30 @@ export class MyAnimation {
 
             // Second row (one below the top row)
             addSp(1, 4, "⬛️");
-            addSp(1, 5, HEX_WHITE);
-            addSp(1, 6, HEX_WHITE);
-            addSp(1, 7, HEX_WHITE);
-            addSp(1, 8, HEX_WHITE);
+            addSp(1, 5, "▢");
+            addSp(1, 6, "▢");
+            addSp(1, 7, "▢");
+            addSp(1, 8, "▢");
             addSp(1, 9, "⬛️");
 
             addSp(2, 3, "⬛️");
-            addSp(2, 4, HEX_GREEN);
-            addSp(2, 5, HEX_GREEN);
-            addSp(2, 6, HEX_WHITE);
-            addSp(2, 7, HEX_WHITE);
-            addSp(2, 8, HEX_WHITE);
-            addSp(2, 9, HEX_WHITE);
+            addSp(2, 4, "🟩");
+            addSp(2, 5, "🟩");
+            addSp(2, 6, "▢");
+            addSp(2, 7, "▢");
+            addSp(2, 8, "▢");
+            addSp(2, 9, "▢");
             addSp(2, 10, "⬛️");
 
             addSp(3, 2, "⬛️");
-            addSp(3, 3, HEX_GREEN);
-            addSp(3, 4, HEX_GREEN);
-            addSp(3, 5, HEX_GREEN);
-            addSp(3, 6, HEX_WHITE);
-            addSp(3, 7, HEX_WHITE);
-            addSp(3, 8, HEX_WHITE);
-            addSp(3, 9, HEX_GREEN);
-            addSp(3, 10, HEX_GREEN);
+            addSp(3, 3, "🟩");
+            addSp(3, 4, "🟩");
+            addSp(3, 5, "🟩");
+            addSp(3, 6, "▢");
+            addSp(3, 7, "▢");
+            addSp(3, 8, "▢");
+            addSp(3, 9, "🟩");
+            addSp(3, 10, "🟩");
             addSp(3, 11, "⬛️");
 
             {
@@ -139,15 +131,15 @@ export class MyAnimation {
                     row4Column++;
                 }
                 row4("⬛️");
-                row4(HEX_GREEN);
-                row4(HEX_GREEN);
-                row4(HEX_GREEN);
-                row4(HEX_WHITE);
-                row4(HEX_WHITE);
-                row4(HEX_WHITE);
-                row4(HEX_GREEN);
-                row4(HEX_GREEN);
-                row4(HEX_GREEN);
+                row4("🟩");
+                row4("🟩");
+                row4("🟩");
+                row4("▢");
+                row4("▢");
+                row4("▢");
+                row4("🟩");
+                row4("🟩");
+                row4("🟩");
                 addSp(4, 11, "⬛️");
             }
 
@@ -160,16 +152,7 @@ export class MyAnimation {
                     }
                 }
                 row5([
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN
+                    "▢", "🟩", "🟩", "▢", "▢", "▢", "▢", "🟩", "🟩", "🟩"
                 ]);
                 addSp(5, 12, "⬛️");
             }
@@ -185,126 +168,49 @@ export class MyAnimation {
             addSp(6, 1, "⬛️");
             {
                 rowOf(6, 2, [
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                ]);
+                    "▢", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩",]);
             }
             addSp(6, 12, "⬛️");
 
             addSp(7, 0, "⬛️");
             {
                 rowOf(7, 1, [
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                ]);
+                    "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢",]);
             }
             addSp(7, 13, "⬛️");
 
             addSp(8, 0, "⬛️");
             {
                 rowOf(8, 1, [
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                ])
+                    "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢",])
             }
             addSp(8, 13, "⬛️");
 
             addSp(9, 0, "⬛️");
             {
                 rowOf(9, 1, [
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                ])
+                    "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩",])
             }
             addSp(9, 13, "⬛️");
 
             addSp(10, 0, "⬛️");
             {
                 rowOf(10, 1, [
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                ])
+                    "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "🟩", "🟩", "🟩",])
             }
             addSp(10, 13, "⬛️");
 
             addSp(11, 1, "⬛️");
             {
                 rowOf(11, 2, [
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN,
-                ])
+                    "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩",])
             }
             addSp(11, 12, "⬛️");
 
             addSp(12, 1, "⬛️");
             {
                 rowOf(12, 2, [
-                    HEX_GREEN,
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_GREEN,
-                    HEX_GREEN
+                    "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩"
                 ])
             }
             addSp(12, 12, "⬛️");
@@ -312,15 +218,7 @@ export class MyAnimation {
             addSp(13, 2, "⬛️");
             {
                 rowOf(13, 3, [
-                    HEX_GREEN,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                ])
+                    "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "▢",])
             }
             addSp(13, 11, "⬛️");
 
@@ -328,11 +226,7 @@ export class MyAnimation {
             addSp(14, 4, "⬛️");
             {
                 rowOf(14, 5, [
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                    HEX_WHITE,
-                ])
+                    "▢", "▢", "▢", "▢",])
             }
             addSp(14, 9, "⬛️");
             addSp(14, 10, "⬛️");
