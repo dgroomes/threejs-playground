@@ -59,9 +59,11 @@ export class MyAnimation {
             const squircle = newSquircle(X_SIZE, Y_SIZE, 10);
 
             /**
-             * This auto-converts emoji color aliases to the right color code.
+             * This auto-converts emoji color aliases to the right color code. There's a special way to symbolize
+             * nothing by using  " " (space character). The function returns null in that case.
+             *
              * @param color should be a proper ColorRepresentation or stringly-typed "emoji" alias
-             * @return a proper ColorRepresentation
+             * @return a proper ColorRepresentation.
              *
              * For example:
              *
@@ -69,8 +71,10 @@ export class MyAnimation {
              *
              * `maybeConvertEmojiColorAlias(0x6fd251)` will just return the given value: `0x6fd251`.
              */
-            const maybeConvertEmojiColorAlias = (color: ColorRepresentation): ColorRepresentation => {
-                if (color === HEX_GREEN_EMOJI_ALIAS) {
+            const maybeConvertEmojiColorAlias = (color: ColorRepresentation): ColorRepresentation | null => {
+                if (color === " ") {
+                    return null;
+                } else if (color === HEX_GREEN_EMOJI_ALIAS) {
                     return HEX_GREEN;
                 } else if (color === HEX_WHITE_EMOJI_ALIAS) {
                     return HEX_WHITE;
@@ -88,11 +92,14 @@ export class MyAnimation {
              *
              * This is NOT a pure function. It has a closure over a row index variable.
              */
-            const rowOf = (startingColumn: number, colors: ColorRepresentation[]): void => {
+            const rowOf = (colors: ColorRepresentation[]): void => {
+                let startingColumn = 0;
                 for (let color of colors) {
-                    let color1: ColorRepresentation = color;
-                    color1 = maybeConvertEmojiColorAlias(color1);
-                    addShape(this.group, squircle, extrudeSettings, color1, startingColumn++ * X_SIZE + X_OFFSET, Y_OFFSET - rowIdx * Y_SIZE, 0, 0, 0, 0, 1);
+                    color = maybeConvertEmojiColorAlias(color);
+                    if (color !== null) {
+                        addShape(this.group, squircle, extrudeSettings, color, startingColumn * X_SIZE + X_OFFSET, Y_OFFSET - rowIdx * Y_SIZE, 0, 0, 0, 0, 1);
+                    }
+                    startingColumn++;
                 }
 
                 rowIdx++;
@@ -117,22 +124,22 @@ export class MyAnimation {
             // Begin plotting pixels, row-by-row, to make some pixel art.
             // There will be 16 rows and 14 columns total. That means the origin is (0,0) and the opposite corner is (15, 13)
 
-            rowOf(5, ["⬛️", "⬛️", "⬛️", "⬛️"])
-            rowOf(4, ["⬛️", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf(3, ["⬛️", "🟩", "🟩", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf(2, ["⬛️", "🟩", "🟩", "🟩", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf(2, ["⬛️", "🟩", "🟩", "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf(1, ["⬛️", "▢", "🟩", "🟩", "▢", "▢", "▢", "▢", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf(1, ["⬛️", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf(0, ["⬛️", "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf(0, ["⬛️", "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf(0, ["⬛️", "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf(0, ["⬛️", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf(1, ["⬛️", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf(1, ["⬛️", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf(2, ["⬛️", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf(3, ["⬛️", "⬛️", "▢", "▢", "▢", "▢", "⬛️", "⬛️"]);
-            rowOf(5, ["⬛️", "⬛️", "⬛️", "⬛️"]);
+            rowOf( [" ", " ", " ", " ", " ", "⬛️", "⬛️", "⬛️", "⬛️"])
+            rowOf( [" ", " ", " ", " ", "⬛️", "▢", "▢", "▢", "▢", "⬛️"]);
+            rowOf( [" ", " ", " ", "⬛️", "🟩", "🟩", "▢", "▢", "▢", "▢", "⬛️"]);
+            rowOf( [" ", " ", "⬛️", "🟩", "🟩", "🟩", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
+            rowOf( [" ", " ", "⬛️", "🟩", "🟩", "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "⬛️"]);
+            rowOf( [" ", "⬛️", "▢", "🟩", "🟩", "▢", "▢", "▢", "▢", "🟩", "🟩", "🟩", "⬛️"]);
+            rowOf( [" ", "⬛️", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
+            rowOf( ["⬛️", "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "⬛️"]);
+            rowOf( ["⬛️", "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "⬛️"]);
+            rowOf( ["⬛️", "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩", "⬛️"]);
+            rowOf( ["⬛️", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "⬛️"]);
+            rowOf( [" ", "⬛️", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩", "⬛️"]);
+            rowOf( [" ", "⬛️", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
+            rowOf( [" ", " ", "⬛️", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "⬛️"]);
+            rowOf( [" ", " ", " ", "⬛️", "⬛️", "▢", "▢", "▢", "▢", "⬛️", "⬛️"]);
+            rowOf( [" ", " ", " ", " ", " ", "⬛️", "⬛️", "⬛️", "⬛️"]);
         }
 
         // This code is written in a wacky way.
