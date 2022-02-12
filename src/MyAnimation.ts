@@ -1,5 +1,5 @@
-import {ColorRepresentation, Fog, Group, PerspectiveCamera, Scene, WebGLRenderer} from "three";
-import {addShape, newCamera, newLight, newRenderer, newSquircle, newScene} from "./animation-util";
+import {ColorRepresentation, Group, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {addShape, newCamera, newLight, newRenderer, newScene, newSquircle} from "./animation-util";
 
 const HEX_GRAY = 0x808080;
 
@@ -81,39 +81,43 @@ export class MyAnimation {
                 }
             }
 
-            /** Add a squircle-pixel */
-            const addSp = (row: number, column: number, color: ColorRepresentation): void => {
-                color = maybeConvertEmojiColorAlias(color);
-                addShape(this.group, squircle, extrudeSettings, color, column * X_SIZE + X_OFFSET, Y_OFFSET - row * Y_SIZE, 0, 0, 0, 0, 1);
+            let rowIdx = 0;
+
+            /**
+             * Add a row of squircle-pixel.
+             *
+             * This is NOT a pure function. It has a closure over a row index variable.
+             */
+            const rowOf = (startingColumn: number, colors: ColorRepresentation[]): void => {
+                for (let color of colors) {
+                    let color1: ColorRepresentation = color;
+                    color1 = maybeConvertEmojiColorAlias(color1);
+                    addShape(this.group, squircle, extrudeSettings, color1, startingColumn++ * X_SIZE + X_OFFSET, Y_OFFSET - rowIdx * Y_SIZE, 0, 0, 0, 0, 1);
+                }
+
+                rowIdx++;
             }
 
-            // I got desperate and clever at this point and defined a helper function to build a row of squircles
-            // from an array of colors. This is more expressive.
-            const rowOf = (row: number, startingColumn: number, colors: ColorRepresentation[]): void => {
-                for (let color of colors) {
-                    addSp(row, startingColumn++, color);
-                }
-            }
 
             // Begin plotting pixels, row-by-row, to make some pixel art.
             // There will be 16 rows and 14 columns total. That means the origin is (0,0) and the opposite corner is (15, 13)
 
-            rowOf(0, 5, ["⬛️", "⬛️", "⬛️", "⬛️"])
-            rowOf(1, 4, ["⬛️", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf(2, 3, ["⬛️", "🟩", "🟩", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf(3, 2, ["⬛️", "🟩", "🟩", "🟩", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf(4, 2, ["⬛️", "🟩", "🟩", "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf(5, 1, ["⬛️", "▢", "🟩", "🟩", "▢", "▢", "▢", "▢", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf(6, 1, ["⬛️", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf(7, 0, ["⬛️", "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf(8, 0, ["⬛️", "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf(9, 0, ["⬛️", "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf(10, 0, ["⬛️", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf(11, 1, ["⬛️", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf(12, 1, ["⬛️", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf(13, 2, ["⬛️", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf(14, 3, ["⬛️", "⬛️", "▢", "▢", "▢", "▢", "⬛️", "⬛️"]);
-            rowOf(15, 5, ["⬛️", "⬛️", "⬛️", "⬛️"]);
+            rowOf(5, ["⬛️", "⬛️", "⬛️", "⬛️"])
+            rowOf(4, ["⬛️", "▢", "▢", "▢", "▢", "⬛️"]);
+            rowOf(3, ["⬛️", "🟩", "🟩", "▢", "▢", "▢", "▢", "⬛️"]);
+            rowOf(2, ["⬛️", "🟩", "🟩", "🟩", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
+            rowOf(2, ["⬛️", "🟩", "🟩", "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "⬛️"]);
+            rowOf(1, ["⬛️", "▢", "🟩", "🟩", "▢", "▢", "▢", "▢", "🟩", "🟩", "🟩", "⬛️"]);
+            rowOf(1, ["⬛️", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
+            rowOf(0, ["⬛️", "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "⬛️"]);
+            rowOf(0, ["⬛️", "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "⬛️"]);
+            rowOf(0, ["⬛️", "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩", "⬛️"]);
+            rowOf(0, ["⬛️", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "⬛️"]);
+            rowOf(1, ["⬛️", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩", "⬛️"]);
+            rowOf(1, ["⬛️", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
+            rowOf(2, ["⬛️", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "⬛️"]);
+            rowOf(3, ["⬛️", "⬛️", "▢", "▢", "▢", "▢", "⬛️", "⬛️"]);
+            rowOf(5, ["⬛️", "⬛️", "⬛️", "⬛️"]);
         }
 
         // This code is written in a wacky way.
