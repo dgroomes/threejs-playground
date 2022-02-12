@@ -7,7 +7,7 @@ const HEX_GREEN = 0x6fd251;
 const HEX_GREEN_EMOJI_ALIAS = "🟩";
 
 const HEX_WHITE = 0xfcfcfc;
-const HEX_WHITE_EMOJI_ALIAS = "▢";
+const HEX_WHITE_EMOJI_ALIAS = "⃞";
 
 const HEX_BLACK = 0x000000;
 const HEX_BLACK_EMOJI_ALIAS = "⬛️";
@@ -60,7 +60,7 @@ export class MyAnimation {
 
             /**
              * This auto-converts emoji color aliases to the right color code. There's a special way to symbolize
-             * nothing by using  " " (space character). The function returns null in that case.
+             * nothing by using  "⎯" ("horizontal line extension" character). The function returns null in that case.
              *
              * @param color should be a proper ColorRepresentation or stringly-typed "emoji" alias
              * @return a proper ColorRepresentation.
@@ -72,7 +72,7 @@ export class MyAnimation {
              * `maybeConvertEmojiColorAlias(0x6fd251)` will just return the given value: `0x6fd251`.
              */
             const maybeConvertEmojiColorAlias = (color: ColorRepresentation): ColorRepresentation | null => {
-                if (color === " ") {
+                if (color === "⎯") {
                     return null;
                 } else if (color === HEX_GREEN_EMOJI_ALIAS) {
                     return HEX_GREEN;
@@ -107,7 +107,7 @@ export class MyAnimation {
 
             /**
              * THIS DOES NOT WORK
-             * Like "rowOf()" but it takes a string of emoji color aliases, like ""⬛️🟩🟩▢▢▢▢⬛️".
+             * Like "rowOf()" but it takes a string of emoji color aliases, like ""⬛️🟩🟩⃞⃞⃞⃞⬛️".
              */
             const rowFromEmojiAliasString = (startingColumn: number, colorsString: string): void => {
                 for (let color of colorsString) {
@@ -124,22 +124,22 @@ export class MyAnimation {
             // Begin plotting pixels, row-by-row, to make some pixel art.
             // There will be 16 rows and 14 columns total. That means the origin is (0,0) and the opposite corner is (15, 13)
 
-            rowOf( [" ", " ", " ", " ", " ", "⬛️", "⬛️", "⬛️", "⬛️"])
-            rowOf( [" ", " ", " ", " ", "⬛️", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf( [" ", " ", " ", "⬛️", "🟩", "🟩", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf( [" ", " ", "⬛️", "🟩", "🟩", "🟩", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf( [" ", " ", "⬛️", "🟩", "🟩", "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf( [" ", "⬛️", "▢", "🟩", "🟩", "▢", "▢", "▢", "▢", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf( [" ", "⬛️", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf( ["⬛️", "🟩", "▢", "▢", "▢", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf( ["⬛️", "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf( ["⬛️", "▢", "▢", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf( ["⬛️", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf( [" ", "⬛️", "🟩", "🟩", "▢", "🟩", "🟩", "🟩", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf( [" ", "⬛️", "🟩", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "🟩", "🟩", "⬛️"]);
-            rowOf( [" ", " ", "⬛️", "🟩", "▢", "▢", "▢", "▢", "▢", "▢", "▢", "⬛️"]);
-            rowOf( [" ", " ", " ", "⬛️", "⬛️", "▢", "▢", "▢", "▢", "⬛️", "⬛️"]);
-            rowOf( [" ", " ", " ", " ", " ", "⬛️", "⬛️", "⬛️", "⬛️"]);
+            rowOf( ["⎯", "⎯", "⎯", "⎯", "⎯", "⬛️", "⬛️", "⬛️", "⬛️"])
+            rowOf( ["⎯", "⎯", "⎯", "⎯", "⬛️", "⃞", "⃞", "⃞", "⃞", "⬛️"]);
+            rowOf( ["⎯", "⎯", "⎯", "⬛️", "🟩", "🟩", "⃞", "⃞", "⃞", "⃞", "⬛️"]);
+            rowOf( ["⎯", "⎯", "⬛️", "🟩", "🟩", "🟩", "⃞", "⃞", "⃞", "🟩", "🟩", "⬛️"]);
+            rowOf( ["⎯", "⎯", "⬛️", "🟩", "🟩", "🟩", "⃞", "⃞", "⃞", "🟩", "🟩", "🟩", "⬛️"]);
+            rowOf( ["⎯", "⬛️", "⃞", "🟩", "🟩", "⃞", "⃞", "⃞", "⃞", "🟩", "🟩", "🟩", "⬛️"]);
+            rowOf( ["⎯", "⬛️", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "🟩", "🟩", "⬛️"]);
+            rowOf( ["⬛️", "🟩", "⃞", "⃞", "⃞", "🟩", "🟩", "🟩", "⃞", "⃞", "⃞", "⃞", "⃞", "⬛️"]);
+            rowOf( ["⬛️", "⃞", "⃞", "⃞", "🟩", "🟩", "🟩", "🟩", "🟩", "⃞", "⃞", "⃞", "⃞", "⬛️"]);
+            rowOf( ["⬛️", "⃞", "⃞", "⃞", "🟩", "🟩", "🟩", "🟩", "🟩", "⃞", "⃞", "🟩", "🟩", "⬛️"]);
+            rowOf( ["⬛️", "🟩", "🟩", "⃞", "🟩", "🟩", "🟩", "🟩", "🟩", "⃞", "🟩", "🟩", "🟩", "⬛️"]);
+            rowOf( ["⎯", "⬛️", "🟩", "🟩", "⃞", "🟩", "🟩", "🟩", "⃞", "⃞", "🟩", "🟩", "⬛️"]);
+            rowOf( ["⎯", "⬛️", "🟩", "🟩", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "🟩", "🟩", "⬛️"]);
+            rowOf( ["⎯", "⎯", "⬛️", "🟩", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "⬛️"]);
+            rowOf( ["⎯", "⎯", "⎯", "⬛️", "⬛️", "⃞", "⃞", "⃞", "⃞", "⬛️", "⬛️"]);
+            rowOf( ["⎯", "⎯", "⎯", "⎯", "⎯", "⬛️", "⬛️", "⬛️", "⬛️"]);
         }
 
         // This code is written in a wacky way.
