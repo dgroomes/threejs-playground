@@ -1,7 +1,5 @@
 # threejs-playground
 
-NOT YET IMPLEMENTED
-
 📚 Learning and experimenting with three.js.
 
 > JavaScript 3D library
@@ -16,11 +14,11 @@ NOT YET IMPLEMENTED
 
 Follow these instructions to build and run the project.
 
-* Install dependencies:
-  * `npm install`
-* Build the the project continuously and serve the web content:
-  * `npm run start`
-  * The browser will open automatically and show the final product!
+1. Install dependencies:
+   * `npm install`
+1. Build the the project continuously and serve the web content:
+   * `npm run start`
+   * The browser will open automatically and show the final product!
 
 ## Design
 
