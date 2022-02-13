@@ -1,4 +1,4 @@
-import {ColorRepresentation, Group, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {ColorRepresentation, Group, PerspectiveCamera, Scene, WebGLRenderer, Fog} from "three";
 import {addShape, newCamera, newLight, newRenderer, newScene, newSquircle} from "./animation-util";
 
 const HEX_GRAY = 0x808080;
@@ -11,6 +11,15 @@ const HEX_WHITE_EMOJI_ALIAS = "⃞";
 
 const HEX_BLACK = 0x000000;
 const HEX_BLACK_EMOJI_ALIAS = "⬛";
+
+const HEX_YELLOW = 0xEFF351;
+const HEX_YELLOW_EMOJI_ALIAS = "🟨";
+
+const HEX_BROWN = 0x60360F;
+const HEX_BROWN_EMOJI_ALIAS = "🟫";
+
+const HEX_SAND = 0xD4BC83;
+const HEX_SAND_EMOJI_ALIAS = "🟧";
 
 /**
  * This class encapsulates the core animation code in this project.
@@ -36,7 +45,7 @@ export class MyAnimation {
 
         {
             this.group = new Group();
-            this.group.position.y = 50;
+            this.group.position.y = 175;
             this.scene.add(this.group);
             const extrudeSettings = {
                 depth: 8,
@@ -52,11 +61,11 @@ export class MyAnimation {
             let column = 0;
 
             // The amount to offset the "row" and "column" logical representations when rendering to the viewport
-            const X_SIZE = 25; // The 'x size' is the width of each squircle-pixel (SP)
-            const Y_SIZE = 25; // The 'y size' is the height of each SP
+            const X_SIZE = 15; // The 'x size' is the width of each squircle-pixel (SP)
+            const Y_SIZE = 15; // The 'y size' is the height of each SP
             const X_OFFSET = -4 * X_SIZE;
             const Y_OFFSET = 10 * Y_SIZE;
-            const squircle = newSquircle(X_SIZE, Y_SIZE, 10);
+            const squircle = newSquircle(X_SIZE, Y_SIZE, 1);
 
             /**
              * This auto-converts emoji color aliases to the right color code. There's a special way to symbolize
@@ -79,6 +88,12 @@ export class MyAnimation {
                     return HEX_WHITE;
                 } else if (emojiAlias === HEX_BLACK_EMOJI_ALIAS) {
                     return HEX_BLACK;
+                } else if (emojiAlias === HEX_YELLOW_EMOJI_ALIAS) {
+                    return HEX_YELLOW;
+                } else if (emojiAlias === HEX_BROWN_EMOJI_ALIAS) {
+                    return HEX_BROWN;
+                } else if (emojiAlias === HEX_SAND_EMOJI_ALIAS) {
+                    return HEX_SAND;
                 } else {
                     throw new Error(`Not a valid emoji color alias: ${emojiAlias}`);
                 }
@@ -110,22 +125,47 @@ export class MyAnimation {
             // Begin plotting pixels, row-by-row, to make some pixel art.
             // There will be 16 rows and 14 columns total. That means the origin is (0,0) and the opposite corner is (15, 13)
 
-            row("⎯ ⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ ⬛");
-            row("⎯ ⎯ ⎯ ⎯ ⬛ ⃞ ⃞ ⃞ ⃞ ⬛");
-            row("⎯ ⎯ ⎯ ⬛ 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⬛");
-            row("⎯ ⎯ ⬛ 🟩 🟩 🟩 ⃞ ⃞ ⃞ 🟩 🟩 ⬛");
-            row("⎯ ⎯ ⬛ 🟩 🟩 🟩 ⃞ ⃞ ⃞ 🟩 🟩 🟩 ⬛");
-            row("⎯ ⬛ ⃞ 🟩 🟩 ⃞ ⃞ ⃞ ⃞ 🟩 🟩 🟩 ⬛");
-            row("⎯ ⬛ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ 🟩 🟩 ⬛");
-            row("⬛ 🟩 ⃞ ⃞ ⃞ 🟩 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⃞ ⬛");
-            row("⬛ ⃞ ⃞ ⃞ 🟩 🟩 🟩 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⬛");
-            row("⬛ ⃞ ⃞ ⃞ 🟩 🟩 🟩 🟩 🟩 ⃞ ⃞ 🟩 🟩 ⬛");
-            row("⬛ 🟩 🟩 ⃞ 🟩 🟩 🟩 🟩 🟩 ⃞ 🟩 🟩 🟩 ⬛");
-            row("⎯ ⬛ 🟩 🟩 ⃞ 🟩 🟩 🟩 ⃞ ⃞ 🟩 🟩 ⬛");
-            row("⎯ ⬛ 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ 🟩 🟩 ⬛");
-            row("⎯ ⎯ ⬛ 🟩 ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⬛");
-            row("⎯ ⎯ ⎯ ⬛ ⬛ ⃞ ⃞ ⃞ ⃞ ⬛ ⬛");
-            row("⎯ ⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ ⬛");
+            // row("⎯ ⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ ⬛");
+            // row("⎯ ⎯ ⎯ ⎯ ⬛ ⃞ ⃞ ⃞ ⃞ ⬛");
+            // row("⎯ ⎯ ⎯ ⬛ 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⬛");
+            // row("⎯ ⎯ ⬛ 🟩 🟩 🟩 ⃞ ⃞ ⃞ 🟩 🟩 ⬛");
+            // row("⎯ ⎯ ⬛ 🟩 🟩 🟩 ⃞ ⃞ ⃞ 🟩 🟩 🟩 ⬛");
+            // row("⎯ ⬛ ⃞ 🟩 🟩 ⃞ ⃞ ⃞ ⃞ 🟩 🟩 🟩 ⬛");
+            // row("⎯ ⬛ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ 🟩 🟩 ⬛");
+            // row("⬛ 🟩 ⃞ ⃞ ⃞ 🟩 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⃞ ⬛");
+            // row("⬛ ⃞ ⃞ ⃞ 🟩 🟩 🟩 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⬛");
+            // row("⬛ ⃞ ⃞ ⃞ 🟩 🟩 🟩 🟩 🟩 ⃞ ⃞ 🟩 🟩 ⬛");
+            // row("⬛ 🟩 🟩 ⃞ 🟩 🟩 🟩 🟩 🟩 ⃞ 🟩 🟩 🟩 ⬛");
+            // row("⎯ ⬛ 🟩 🟩 ⃞ 🟩 🟩 🟩 ⃞ ⃞ 🟩 🟩 ⬛");
+            // row("⎯ ⬛ 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ 🟩 🟩 ⬛");
+            // row("⎯ ⎯ ⬛ 🟩 ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⬛");
+            // row("⎯ ⎯ ⎯ ⬛ ⬛ ⃞ ⃞ ⃞ ⃞ ⬛ ⬛");
+            // row("⎯ ⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ ⬛");
+
+            row("⎯ ⎯ ⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ ⬛ ⬛ ⬛ ⎯ ⎯ ⎯ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⎯ ⎯ ⬛ ⬛ 🟩 🟩 🟩 🟩 ⬛ ⬛ ⎯ ⎯ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⎯ ⬛ ⬛ 🟩 🟩 🟩 🟩 🟩 🟩 ⬛ ⬛ ⎯ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⬛ ⬛ 🟩 🟩 🟩 🟩 🟩 🟩 🟩 🟩 ⬛ ⬛ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⬛ 🟩 ⬛ 🟨 🟨 🟨 🟨 🟨 🟨 ⬛ 🟩 ⬛ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⬛ ⬛ 🟨 🟨 🟨 🟨 🟨 🟨 🟨 🟨 ⬛ ⬛ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⬛ ⬛ 🟨 🟨 ⬛ 🟨 🟨 🟨 🟨 ⬛ 🟨 🟨 ⬛ ⬛ ⎯ ⎯");
+            row("⬛ ⬛ ⬛ ⬛ 🟨 ⬛ 🟨 🟨 🟨 🟨 ⬛ ⬛ ⬛ 🟨 ⬛ ⬛ ⬛ ⬛");
+            row("⬛ 🟧 🟧 ⬛ ⬛ 🟨 🟨 🟨 🟨 ⬛ ⬛ 🟧 ⬛ 🟨 ⬛ 🟧 🟧 ⬛");
+            row("⎯ ⬛ ⬛ ⬛ ⬛ 🟨 🟨 ⬛ ⬛ ⬛ 🟧 🟧 ⬛ 🟨 ⬛ ⬛ ⬛ ⎯");
+            row("⎯ ⎯ ⬛ 🟨 ⬛ ⬛ ⬛ ⬛ ⬛ 🟧 ⬛ ⬛ ⬛ ⬛ 🟨 ⬛ ⎯ ⎯");
+            row("⎯ ⎯ ⬛ 🟨 ⬛ ⃞ ⬛ ⬛ 🟧 🟧 ⬛ ⬛ ⃞ ⬛ 🟨 ⬛ ⎯ ⎯");
+            row("⎯ ⎯ ⬛ ⬛ ⬛ 🟧 ⬛ ⃞ 🟧 🟧 ⃞ ⬛ 🟧 ⬛ ⬛ ⬛ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⬛ ⬛ ⬛ 🟧 🟧 🟧 🟧 🟧 🟧 ⬛ ⬛ ⬛ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ ⬛ ⬛ ⬛ ⬛ ⬛ ⬛ ⬛ ⎯ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⬛ 🟩 ⬛ 🟩 🟩 🟩 🟩 🟩 🟩 ⬛ 🟩 ⬛ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⬛ 🟩 🟩 ⬛ 🟩 🟩 🟩 🟩 🟩 🟩 ⬛ 🟩 🟩 ⬛ ⎯ ⎯");
+            row("⎯ ⬛ 🟧 🟧 ⬛ ⬛ 🟩 🟩 🟩 🟩 🟩 🟩 ⬛ ⬛ 🟧 🟧 ⬛ ⎯");
+            row("⎯ ⬛ ⬛ 🟧 ⬛ 🟩 ⬛ ⬛ 🟨 🟨 ⬛ ⬛ 🟩 ⬛ 🟧 ⬛ ⬛ ⎯");
+            row("⎯ ⎯ ⬛ ⬛ ⬛ 🟩 🟩 ⬛ 🟨 🟨 ⬛ 🟩 🟩 ⬛ ⬛ ⬛ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ 🟩 🟩 🟩 🟩 ⬛ ⬛ ⬛ ⎯ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⬛ 🟫 🟫 🟫 ⬛ ⬛ ⬛ ⬛ 🟫 🟫 🟫 ⬛ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⬛ 🟫 🟫 ⬛ ⬛ ⎯ ⎯ ⬛ ⬛ 🟫 🟫 ⬛ ⎯ ⎯ ⎯");
+            row("⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ ⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ ⎯ ⎯ ⎯ ⎯");
         }
 
         // This code is written in a wacky way.
