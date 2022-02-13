@@ -10,7 +10,7 @@ const HEX_WHITE = 0xfcfcfc;
 const HEX_WHITE_EMOJI_ALIAS = "⃞";
 
 const HEX_BLACK = 0x000000;
-const HEX_BLACK_EMOJI_ALIAS = "⬛️";
+const HEX_BLACK_EMOJI_ALIAS = "⬛";
 
 /**
  * This class encapsulates the core animation code in this project.
@@ -62,26 +62,25 @@ export class MyAnimation {
              * This auto-converts emoji color aliases to the right color code. There's a special way to symbolize
              * nothing by using  "⎯" ("horizontal line extension" character). The function returns null in that case.
              *
-             * @param color should be a proper ColorRepresentation or stringly-typed "emoji" alias
-             * @return a proper ColorRepresentation.
+             * @param emojiAlias an "emoji alias"
+             * @return a proper ColorRepresentation or null if "⎯" was found
              *
              * For example:
              *
-             * `maybeConvertEmojiColorAlias("🟩")` will return the hex code for green: `0x6fd251`.
-             *
-             * `maybeConvertEmojiColorAlias(0x6fd251)` will just return the given value: `0x6fd251`.
+             * `convertEmojiColorAlias("🟩")` will return the hex code for green: 0x6fd251.
+             * `convertEmojiColorAlias("⎯")` will return null.
              */
-            const maybeConvertEmojiColorAlias = (color: ColorRepresentation): ColorRepresentation | null => {
-                if (color === "⎯") {
+            const convertEmojiColorAlias = (emojiAlias: string): ColorRepresentation | null => {
+                if (emojiAlias === "⎯") {
                     return null;
-                } else if (color === HEX_GREEN_EMOJI_ALIAS) {
+                } else if (emojiAlias === HEX_GREEN_EMOJI_ALIAS) {
                     return HEX_GREEN;
-                } else if (color === HEX_WHITE_EMOJI_ALIAS) {
+                } else if (emojiAlias === HEX_WHITE_EMOJI_ALIAS) {
                     return HEX_WHITE;
-                } else if (color === HEX_BLACK_EMOJI_ALIAS) {
+                } else if (emojiAlias === HEX_BLACK_EMOJI_ALIAS) {
                     return HEX_BLACK;
                 } else {
-                    return color;
+                    throw new Error(`Not a valid emoji color alias: ${emojiAlias}`);
                 }
             }
 
@@ -91,13 +90,16 @@ export class MyAnimation {
              * Add a row of squircle-pixels.
              *
              * This is NOT a pure function. It has a closure over a row index variable.
+             *
+             * @param colorsString space-separated emoji color aliases, like "⎯ ⎯ ⬛ 🟩 🟩 🟩 ⃞ ⃞ ⃞ 🟩 🟩 ⬛"
              */
-            const rowOf = (colors: ColorRepresentation[]): void => {
+            const row = (colorsString: string): void => {
                 let startingColumn = 0;
-                for (let color of colors) {
-                    color = maybeConvertEmojiColorAlias(color);
-                    if (color !== null) {
-                        addShape(this.group, squircle, extrudeSettings, color, startingColumn * X_SIZE + X_OFFSET, Y_OFFSET - rowIdx * Y_SIZE, 0, 0, 0, 0, 1);
+                const emojiAliases = colorsString.split(" ");
+                for (let emojiAlias of emojiAliases) {
+                    let colorNullable = convertEmojiColorAlias(emojiAlias);
+                    if (colorNullable !== null) {
+                        addShape(this.group, squircle, extrudeSettings, colorNullable, startingColumn * X_SIZE + X_OFFSET, Y_OFFSET - rowIdx * Y_SIZE, 0, 0, 0, 0, 1);
                     }
                     startingColumn++;
                 }
@@ -105,41 +107,25 @@ export class MyAnimation {
                 rowIdx++;
             }
 
-            /**
-             * THIS DOES NOT WORK
-             * Like "rowOf()" but it takes a string of emoji color aliases, like ""⬛️🟩🟩⃞⃞⃞⃞⬛️".
-             */
-            const rowFromEmojiAliasString = (startingColumn: number, colorsString: string): void => {
-                for (let color of colorsString) {
-                    console.log(`Found color: ${color}`)
-                    let color1: ColorRepresentation = color;
-                    color1 = maybeConvertEmojiColorAlias(color1);
-                    addShape(this.group, squircle, extrudeSettings, color1, startingColumn++ * X_SIZE + X_OFFSET, Y_OFFSET - rowIdx * Y_SIZE, 0, 0, 0, 0, 1);
-                }
-
-                rowIdx++;
-            }
-
-
             // Begin plotting pixels, row-by-row, to make some pixel art.
             // There will be 16 rows and 14 columns total. That means the origin is (0,0) and the opposite corner is (15, 13)
 
-            rowOf( ["⎯", "⎯", "⎯", "⎯", "⎯", "⬛️", "⬛️", "⬛️", "⬛️"])
-            rowOf( ["⎯", "⎯", "⎯", "⎯", "⬛️", "⃞", "⃞", "⃞", "⃞", "⬛️"]);
-            rowOf( ["⎯", "⎯", "⎯", "⬛️", "🟩", "🟩", "⃞", "⃞", "⃞", "⃞", "⬛️"]);
-            rowOf( ["⎯", "⎯", "⬛️", "🟩", "🟩", "🟩", "⃞", "⃞", "⃞", "🟩", "🟩", "⬛️"]);
-            rowOf( ["⎯", "⎯", "⬛️", "🟩", "🟩", "🟩", "⃞", "⃞", "⃞", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf( ["⎯", "⬛️", "⃞", "🟩", "🟩", "⃞", "⃞", "⃞", "⃞", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf( ["⎯", "⬛️", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "🟩", "🟩", "⬛️"]);
-            rowOf( ["⬛️", "🟩", "⃞", "⃞", "⃞", "🟩", "🟩", "🟩", "⃞", "⃞", "⃞", "⃞", "⃞", "⬛️"]);
-            rowOf( ["⬛️", "⃞", "⃞", "⃞", "🟩", "🟩", "🟩", "🟩", "🟩", "⃞", "⃞", "⃞", "⃞", "⬛️"]);
-            rowOf( ["⬛️", "⃞", "⃞", "⃞", "🟩", "🟩", "🟩", "🟩", "🟩", "⃞", "⃞", "🟩", "🟩", "⬛️"]);
-            rowOf( ["⬛️", "🟩", "🟩", "⃞", "🟩", "🟩", "🟩", "🟩", "🟩", "⃞", "🟩", "🟩", "🟩", "⬛️"]);
-            rowOf( ["⎯", "⬛️", "🟩", "🟩", "⃞", "🟩", "🟩", "🟩", "⃞", "⃞", "🟩", "🟩", "⬛️"]);
-            rowOf( ["⎯", "⬛️", "🟩", "🟩", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "🟩", "🟩", "⬛️"]);
-            rowOf( ["⎯", "⎯", "⬛️", "🟩", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "⃞", "⬛️"]);
-            rowOf( ["⎯", "⎯", "⎯", "⬛️", "⬛️", "⃞", "⃞", "⃞", "⃞", "⬛️", "⬛️"]);
-            rowOf( ["⎯", "⎯", "⎯", "⎯", "⎯", "⬛️", "⬛️", "⬛️", "⬛️"]);
+            row("⎯ ⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ ⬛");
+            row("⎯ ⎯ ⎯ ⎯ ⬛ ⃞ ⃞ ⃞ ⃞ ⬛");
+            row("⎯ ⎯ ⎯ ⬛ 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⬛");
+            row("⎯ ⎯ ⬛ 🟩 🟩 🟩 ⃞ ⃞ ⃞ 🟩 🟩 ⬛");
+            row("⎯ ⎯ ⬛ 🟩 🟩 🟩 ⃞ ⃞ ⃞ 🟩 🟩 🟩 ⬛");
+            row("⎯ ⬛ ⃞ 🟩 🟩 ⃞ ⃞ ⃞ ⃞ 🟩 🟩 🟩 ⬛");
+            row("⎯ ⬛ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ 🟩 🟩 ⬛");
+            row("⬛ 🟩 ⃞ ⃞ ⃞ 🟩 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⃞ ⬛");
+            row("⬛ ⃞ ⃞ ⃞ 🟩 🟩 🟩 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⬛");
+            row("⬛ ⃞ ⃞ ⃞ 🟩 🟩 🟩 🟩 🟩 ⃞ ⃞ 🟩 🟩 ⬛");
+            row("⬛ 🟩 🟩 ⃞ 🟩 🟩 🟩 🟩 🟩 ⃞ 🟩 🟩 🟩 ⬛");
+            row("⎯ ⬛ 🟩 🟩 ⃞ 🟩 🟩 🟩 ⃞ ⃞ 🟩 🟩 ⬛");
+            row("⎯ ⬛ 🟩 🟩 ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ 🟩 🟩 ⬛");
+            row("⎯ ⎯ ⬛ 🟩 ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⃞ ⬛");
+            row("⎯ ⎯ ⎯ ⬛ ⬛ ⃞ ⃞ ⃞ ⃞ ⬛ ⬛");
+            row("⎯ ⎯ ⎯ ⎯ ⎯ ⬛ ⬛ ⬛ ⬛");
         }
 
         // This code is written in a wacky way.
