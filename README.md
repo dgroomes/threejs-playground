@@ -24,7 +24,7 @@ Follow these instructions to build and run the project.
 
 This project uses three.js to make an animation inspired by pixel art.
 
-The animation can be hosted in GitHub Pages. The process is not automated. Build the project, then copy the contents of
+The animation can be hosted in GitHub Pages. The process is not automated. Build the project with `npm run build`, then copy the contents of
 `dist/` into `docs/` and then commit and push the changes. The final result should be published by GitHub to the
 repository's GitHub Pages page at <https://dgroomes.github.io/threejs-playground>.
 
